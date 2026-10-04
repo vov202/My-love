@@ -131,7 +131,6 @@ button {
     z-index: 5;
     box-shadow: 0 0 15px rgba(255, 71, 126, 0.2);
     animation: pulseGlow 2.5s infinite ease-in-out;
-    /* Ультра-плавный улет конверта вниз экрана за 3.5 секунды */
     transition: transform 3.5s cubic-bezier(0.1, 0.8, 0.2, 1), opacity 3.2s ease-in-out;
 }
 
@@ -181,13 +180,11 @@ button {
     transition: transform 0.9s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.5s, height 0.9s ease 0.5s, opacity 0.7s ease 0.5s;
 }
 
-/* --- АНИМАЦИЯ ПРИ КЛИКЕ --- */
-
+/* АНИМАЦИЯ ПРИ КЛИКЕ */
 .main-container.open .top-flap {
     transform: rotateX(180deg);
 }
 
-/* Конверт нежно, без рывков скользит вниз за рамки экрана */
 .main-container.open .envelope-wrapper {
     transform: translateY(380px);
     opacity: 0;
@@ -258,8 +255,7 @@ button {
     50% { box-shadow: 0 0 25px rgba(255, 71, 126, 0.5), 0 15px 35px rgba(0,0,0,0.2); transform: scale(1.02); }
 }
 
-
-/* --- БОКОВОЙ ПЛАВНЫЙ ЛИСТОПАД СЕРДЕЧЕК --- */
+/* БОКОВОЙ ЛИСТОПАД */
 .falling-hearts-left, .falling-hearts-right {
     position: fixed;
     top: -50px;
@@ -267,11 +263,11 @@ button {
     width: 80px;
     overflow: visible;
     pointer-events: none;
-    z-index: 1; /* Позади карточки с письмом */
+    z-index: 1;
 }
 
-.falling-hearts-left { left: 4vw; }   /* Поток строго слева */
-.falling-hearts-right { right: 4vw; } /* Поток строго справа */
+.falling-hearts-left { left: 4vw; }
+.falling-hearts-right { right: 4vw; }
 
 .falling-hearts-left span, .falling-hearts-right span {
     position: absolute;
@@ -279,37 +275,42 @@ button {
     opacity: 0;
 }
 
-/* Включаем падение только после открытия письма */
 .start-fall .falling-hearts-left span, 
 .start-fall .falling-hearts-right span {
     animation: slowDrift 6s infinite linear;
 }
 
-/* Настройки задержек и смещения, чтобы падали хаотично и долго */
 .start-fall span:nth-child(1) { left: 10%; animation-delay: 0s; font-size: 24px; }
 .start-fall span:nth-child(2) { left: 50%; animation-delay: 1.2s; font-size: 18px; animation-duration: 7s; }
 .start-fall span:nth-child(3) { left: 25%; animation-delay: 2.5s; font-size: 26px; animation-duration: 5.5s; }
 .start-fall span:nth-child(4) { left: 70%; animation-delay: 3.8s; font-size: 16px; animation-duration: 8s; }
 .start-fall span:nth-child(5) { left: 40%; animation-delay: 4.8s; font-size: 22px; animation-duration: 6.5s; }
 
-/* Плавное падение волнами, покачиваясь влево-вправо */
 @keyframes slowDrift {
+    0% { transform: translateY(0) rotate(0deg) translateX(0); opacity: 0; }
+    10% { opacity: 0.7; }
+    50% { transform: translateY(50vh) rotate(180deg) translateX(15px); opacity: 0.9; }
+    90% { opacity: 0.6; }
+    100% { transform: translateY(105vh) rotate(360deg) translateX(-15px); opacity: 0; }
+}
+
+/* --- СТИЛИ ДЛЯ КРАСИВЫХ ИСКОРОК ОТ ПАЛЬЦА --- */
+.sparkle-trail {
+    position: fixed;
+    pointer-events: none; /* Чтобы искорки не мешали нажимать кнопки */
+    font-size: 16px;
+    z-index: 9999; /* Поверх всего */
+    animation: flySparkle 0.8s ease-out forwards;
+    opacity: 1;
+}
+
+@keyframes flySparkle {
     0% {
-        transform: translateY(0) rotate(0deg) translateX(0);
-        opacity: 0;
-    }
-    10% {
-        opacity: 0.7;
-    }
-    50% {
-        transform: translateY(50vh) rotate(180deg) translateX(15px);
-        opacity: 0.9;
-    }
-    90% {
-        opacity: 0.6;
+        transform: translate(0, 0) scale(1.2);
+        opacity: 1;
     }
     100% {
-        transform: translateY(105vh) rotate(360deg) translateX(-15px);
+        transform: translate(var(--tw-translate-x, 0), -40px) scale(0.4);
         opacity: 0;
     }
 }
