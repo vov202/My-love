@@ -1,0 +1,230 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background: linear-gradient(135deg, #ffe5ec, #ffc2d1);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.screen {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.5s ease;
+    padding: 20px;
+}
+
+.hidden {
+    display: none;
+    opacity: 0;
+}
+
+.fade-out {
+    opacity: 0;
+}
+
+.fade-in {
+    opacity: 1;
+}
+
+/* Окно пароля */
+.password-box {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    text-align: center;
+    max-width: 90%;
+    width: 350px;
+}
+
+.password-box h2 {
+    color: #ff477e;
+    margin-bottom: 10px;
+    font-size: 22px;
+}
+
+.password-box p {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.code-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 25px;
+}
+
+.code-input {
+    width: 40px;
+    height: 48px;
+    border: 2px solid #ffc2d1;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    color: #ff477e;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.code-input:focus {
+    border-color: #ff477e;
+    box-shadow: 0 0 8px rgba(255, 71, 126, 0.3);
+    transform: scale(1.05);
+}
+
+button {
+    background: #ff477e;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 25px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+    font-weight: bold;
+    box-shadow: 0 5px 15px rgba(255, 71, 126, 0.3);
+}
+
+.error {
+    color: #ff0000;
+    margin-top: 10px;
+    font-size: 14px;
+    height: 18px;
+}
+
+/* Конверт и анимация */
+.envelope-wrapper {
+    position: relative;
+    cursor: pointer;
+    margin-top: 60px;
+}
+
+.envelope {
+    position: relative;
+    width: 300px;
+    height: 180px;
+    background: #f1a7b4;
+    border-radius: 0 0 10px 10px;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+}
+
+.top-flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-left: 150px solid transparent;
+    border-right: 150px solid transparent;
+    border-top: 100px solid #f1a7b4;
+    transform-origin: top;
+    transition: transform 0.4s ease 0.2s;
+    z-index: 3;
+}
+
+.body-envelope {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-left: 150px solid #ffb3c1;
+    border-right: 150px solid #ffb3c1;
+    border-bottom: 90px solid #ffccd5;
+    border-top: 90px solid transparent;
+    border-radius: 0 0 10px 10px;
+    z-index: 2;
+}
+
+.letter {
+    position: absolute;
+    bottom: 5px;
+    left: 10px;
+    width: 280px;
+    height: 165px;
+    background: white;
+    border-radius: 5px;
+    padding: 15px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    transition: transform 0.5s ease, height 0.5s ease;
+    z-index: 1;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Стилизация текста */
+.letter-text {
+    font-size: 14px;
+    color: #444;
+    line-height: 1.6;
+    text-align: left;
+}
+
+.letter-text h3 {
+    color: #ff477e;
+    margin-bottom: 12px;
+    font-size: 15px;
+}
+
+.letter-text p {
+    margin-bottom: 12px;
+}
+
+.signature {
+    font-weight: bold;
+    color: #ff477e;
+    text-align: right;
+    margin-top: 15px;
+}
+
+/* Состояние при открытии */
+.envelope-wrapper.open .top-flap {
+    transform: rotateX(180deg);
+    z-index: 0;
+    transition: transform 0.4s ease, z-index 0.0s linear 0.4s;
+}
+
+.envelope-wrapper.open .letter {
+    transform: translateY(-160px);
+    height: 320px;
+    z-index: 4;
+    transition: transform 0.5s ease 0.4s, height 0.5s ease 0.4s;
+}
+
+.hint {
+    margin-top: 180px;
+    color: #ff477e;
+    font-weight: bold;
+    min-height: 20px;
+    animation: bounce 1.5s infinite;
+}
+
+.shake {
+    animation: shakeAnim 0.4s ease-in-out;
+}
+
+@keyframes shakeAnim {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-10px); }
+    40%, 80% { transform: translateX(10px); }
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
