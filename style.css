@@ -110,8 +110,8 @@ button {
     height: 18px;
 }
 
-/* Конверт и контейнер */
-.envelope-container {
+/* Главный контейнер для анимации */
+.main-container {
     position: relative;
     width: 300px;
     height: 180px;
@@ -120,32 +120,18 @@ button {
     align-items: center;
 }
 
+/* Оболочка конверта */
 .envelope-wrapper {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    cursor: pointer;
-}
-
-.envelope {
     position: absolute;
     width: 300px;
     height: 180px;
     background: #f1a7b4;
     border-radius: 0 0 10px 10px;
     box-shadow: 0 15px 30px rgba(0,0,0,0.15);
-    /* Медленная плавная анимация исчезновения конверта (2 секунды) */
-    transition: transform 2s cubic-bezier(0.4, 0, 0.2, 1), opacity 2s ease;
-    overflow: hidden; /* Надежно прячем письмо до клика */
-    z-index: 2;
-}
-
-/* При открытии конверт медленно уплывает вниз и тает */
-.envelope-container.open .envelope {
-    overflow: visible;
-    transform: translateY(220px);
-    opacity: 0;
-    pointer-events: none;
+    cursor: pointer;
+    z-index: 5;
+    /* Конверт исчезает ОЧЕНЬ медленно и плавно — 2.5 секунды */
+    transition: transform 2.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 2.5s ease;
 }
 
 .top-flap {
@@ -156,14 +142,8 @@ button {
     border-right: 150px solid transparent;
     border-top: 100px solid #f1a7b4;
     transform-origin: top;
-    transition: transform 0.4s ease 0.1s;
-    z-index: 3;
-}
-
-.envelope-container.open .top-flap {
-    transform: rotateX(180deg);
-    z-index: 0;
-    transition: transform 0.4s ease, z-index 0s linear 0.4s;
+    transition: transform 0.4s ease;
+    z-index: 7;
 }
 
 .body-envelope {
@@ -177,38 +157,51 @@ button {
     border-bottom: 90px solid #ffccd5;
     border-top: 90px solid transparent;
     border-radius: 0 0 10px 10px;
-    z-index: 2;
+    z-index: 6;
 }
 
+/* Сама записка — теперь она лежит снаружи конверта и плавно появляется по центру */
 .letter {
-    position: absolute;
-    bottom: 5px;
-    left: 10px;
-    width: 280px;
-    height: 165px;
-    background: white;
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.05);
-    /* Плавный вылет самого письма */
-    transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.3s, height 0.8s ease 0.3s, width 0.8s ease 0.3s, left 0.8s ease 0.3s;
-    z-index: 1;
-    overflow-y: scroll;
-    -webkit-overflow-scrolling: touch;
-}
-
-/* Новое фиксированное позиционирование: письмо встает СТРОГО по центру экрана смартфона или ПК */
-.envelope-container.open .letter {
     position: fixed;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%) scale(1); /* Идеальный центр */
-    bottom: auto;
+    transform: translate(-50%, -40%) scale(0.8); /* Стартовая позиция чуть ниже центра */
     width: 90vw;
     max-width: 350px;
-    height: 65vh; /* Занимает 65% высоты экрана — супер для чтения */
+    height: 160px;
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    opacity: 0; /* Изначально полностью невидима и заблокирована */
+    pointer-events: none;
+    z-index: 1;
+    overflow-y: auto;
+    transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s, height 0.8s ease 0.4s, opacity 0.6s ease 0.4s;
+}
+
+/* --- АНИМАЦИЯ ПРИ КЛИКЕ --- */
+
+/* 1. Крышка конверта откидывается */
+.main-container.open .top-flap {
+    transform: rotateX(180deg);
+}
+
+/* 2. Конверт медленно уплывает вниз экрана и тает */
+.main-container.open .envelope-wrapper {
+    transform: translateY(280px);
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* 3. Письмо плавно материализуется строго по центру и принимает рабочий размер */
+.main-container.open .letter {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1); /* Встает идеально по центру */
+    height: 65vh; /* Оптимальная высота для чтения */
+    pointer-events: auto; /* Включаем возможность скроллить текст */
     z-index: 10;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+    box-shadow: 0 20px 50px rgba(255, 71, 126, 0.2);
 }
 
 /* Стилизация текста */
