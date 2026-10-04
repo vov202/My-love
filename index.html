@@ -31,15 +31,15 @@
     <!-- ЭКРАН С ПИСЬМОМ -->
     <div id="content-screen" class="screen hidden">
         
+        <!-- Боковые потоки падающих сердечек -->
+        <div class="falling-hearts-left">
+            <span>❤️</span><span>💖</span><span>💕</span><span>🌸</span><span>❤️</span>
+        </div>
+        <div class="falling-hearts-right">
+            <span>❤️</span><span>💖</span><span>💕</span><span>🌸</span><span>❤️</span>
+        </div>
+
         <div class="main-container">
-            
-            <!-- Большой фонтан конфетти -->
-            <div class="confetti-container">
-                <span class="c1">❤️</span><span class="c2">💖</span><span class="c3">✨</span>
-                <span class="c4">💕</span><span class="c5">❤️</span><span class="c6">✨</span>
-                <span class="c7">💖</span><span class="c8">🌸</span><span class="c9">❤️</span>
-                <span class="c10">✨</span>
-            </div>
             
             <!-- Конверт -->
             <div class="envelope-wrapper" onclick="openEnvelope()">
@@ -119,9 +119,11 @@
 
         function openEnvelope() {
             const container = document.querySelector('.main-container');
+            const contentScreen = document.getElementById('content-screen');
             const hint = document.getElementById('hint-text');
             
             container.classList.add('open');
+            contentScreen.classList.add('start-fall'); // Запуск бесконечного листопада по бокам
             hint.textContent = 'Листай письмо вниз, чтобы прочесть 👇';
         }
     </script>
