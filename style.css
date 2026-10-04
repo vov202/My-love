@@ -57,9 +57,10 @@ body {
 }
 
 .password-box p {
-    font-size: 14px;
+    font-size: 15px;
     color: #666;
     margin-bottom: 20px;
+    font-weight: 500;
 }
 
 .code-container {
@@ -109,29 +110,42 @@ button {
     height: 18px;
 }
 
-/* Конверт и анимация */
+/* Конверт и контейнер */
+.envelope-container {
+    position: relative;
+    width: 300px;
+    height: 180px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .envelope-wrapper {
     position: relative;
+    width: 100%;
+    height: 100%;
     cursor: pointer;
-    margin-top: 40px;
 }
 
 .envelope {
-    position: relative;
+    position: absolute;
     width: 300px;
     height: 180px;
     background: #f1a7b4;
     border-radius: 0 0 10px 10px;
     box-shadow: 0 15px 30px rgba(0,0,0,0.15);
-    /* Медленная плавная анимация для самого конверта (2 секунды) */
+    /* Медленная плавная анимация исчезновения конверта (2 секунды) */
     transition: transform 2s cubic-bezier(0.4, 0, 0.2, 1), opacity 2s ease;
-    overflow: hidden; /* Обрезает записку, чтобы она не выглядывала раньше времени */
+    overflow: hidden; /* Надежно прячем письмо до клика */
+    z-index: 2;
 }
 
-.envelope-wrapper.open .envelope {
-    overflow: visible; /* Позволяет письму вылезти наружу при открытии */
-    transform: translateY(250px); /* Медленно уводим конверт глубоко вниз */
-    opacity: 0; /* Плавно растворяем конверт */
+/* При открытии конверт медленно уплывает вниз и тает */
+.envelope-container.open .envelope {
+    overflow: visible;
+    transform: translateY(220px);
+    opacity: 0;
+    pointer-events: none;
 }
 
 .top-flap {
@@ -146,7 +160,7 @@ button {
     z-index: 3;
 }
 
-.envelope-wrapper.open .top-flap {
+.envelope-container.open .top-flap {
     transform: rotateX(180deg);
     z-index: 0;
     transition: transform 0.4s ease, z-index 0s linear 0.4s;
@@ -176,29 +190,25 @@ button {
     border-radius: 12px;
     padding: 20px;
     box-shadow: 0 0 10px rgba(0,0,0,0.05);
-    /* Настройка скорости анимации письма */
+    /* Плавный вылет самого письма */
     transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.3s, height 0.8s ease 0.3s, width 0.8s ease 0.3s, left 0.8s ease 0.3s;
     z-index: 1;
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
 }
 
-/* Когда конверт открывается, письмо красиво центрируется и масштабируется */
-.envelope-wrapper.open .letter {
-    transform: translateY(-280px); /* Вылетает на центр экрана */
+/* Новое фиксированное позиционирование: письмо встает СТРОГО по центру экрана смартфона или ПК */
+.envelope-container.open .letter {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1); /* Идеальный центр */
+    bottom: auto;
     width: 90vw;
-    max-width: 340px;
-    left: calc(150px - 45vw); /* Идеальное центрирование на любом телефоне */
-    height: 60vh; /* Удобный размер для чтения */
+    max-width: 350px;
+    height: 65vh; /* Занимает 65% высоты экрана — супер для чтения */
     z-index: 10;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
-}
-
-/* Компенсация центрирования для больших экранов, чтобы не ломалось */
-@media (min-width: 378px) {
-    .envelope-wrapper.open .letter {
-        left: -20px;
-    }
+    box-shadow: 0 20px 50px rgba(0,0,0,0.2);
 }
 
 /* Стилизация текста */
@@ -227,17 +237,11 @@ button {
 }
 
 .hint {
-    margin-top: 220px;
+    margin-top: 60px;
     color: #ff477e;
     font-weight: bold;
     min-height: 20px;
     animation: bounce 1.5s infinite;
-    transition: opacity 0.5s ease;
-}
-
-.envelope-wrapper.open ~ .hint {
-    animation: none;
-    transform: translateY(0);
 }
 
 .shake {
