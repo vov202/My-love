@@ -113,7 +113,8 @@ button {
 .envelope-wrapper {
     position: relative;
     cursor: pointer;
-    margin-top: 60px;
+    margin-top: 20px;
+    transition: transform 0.5s ease;
 }
 
 .envelope {
@@ -193,6 +194,10 @@ button {
 }
 
 /* Состояние при открытии */
+.envelope-wrapper.open {
+    transform: translateY(80px);
+}
+
 .envelope-wrapper.open .top-flap {
     transform: rotateX(180deg);
     z-index: 0;
@@ -200,14 +205,14 @@ button {
 }
 
 .envelope-wrapper.open .letter {
-    transform: translateY(-160px);
-    height: 320px;
+    transform: translateY(-220px);
+    height: 350px;
     z-index: 4;
     transition: transform 0.5s ease 0.4s, height 0.5s ease 0.4s;
 }
 
 .hint {
-    margin-top: 180px;
+    margin-top: 260px;
     color: #ff477e;
     font-weight: bold;
     min-height: 20px;
