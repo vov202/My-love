@@ -57,7 +57,7 @@ body {
 }
 
 .password-box p {
-    font-size: 13px;
+    font-size: 14px;
     color: #666;
     margin-bottom: 20px;
 }
@@ -113,21 +113,25 @@ button {
 .envelope-wrapper {
     position: relative;
     cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 300px;
-    height: 180px;
+    margin-top: 40px;
 }
 
 .envelope {
-    position: absolute;
+    position: relative;
     width: 300px;
     height: 180px;
     background: #f1a7b4;
     border-radius: 0 0 10px 10px;
     box-shadow: 0 15px 30px rgba(0,0,0,0.15);
-    transition: transform 0.6s ease, opacity 0.6s ease;
+    /* Медленная плавная анимация для самого конверта (2 секунды) */
+    transition: transform 2s cubic-bezier(0.4, 0, 0.2, 1), opacity 2s ease;
+    overflow: hidden; /* Обрезает записку, чтобы она не выглядывала раньше времени */
+}
+
+.envelope-wrapper.open .envelope {
+    overflow: visible; /* Позволяет письму вылезти наружу при открытии */
+    transform: translateY(250px); /* Медленно уводим конверт глубоко вниз */
+    opacity: 0; /* Плавно растворяем конверт */
 }
 
 .top-flap {
@@ -138,8 +142,14 @@ button {
     border-right: 150px solid transparent;
     border-top: 100px solid #f1a7b4;
     transform-origin: top;
-    transition: transform 0.4s ease;
+    transition: transform 0.4s ease 0.1s;
     z-index: 3;
+}
+
+.envelope-wrapper.open .top-flap {
+    transform: rotateX(180deg);
+    z-index: 0;
+    transition: transform 0.4s ease, z-index 0s linear 0.4s;
 }
 
 .body-envelope {
@@ -158,17 +168,37 @@ button {
 
 .letter {
     position: absolute;
-    width: 90vw; /* Письмо подстроится под ширину экрана смартфона */
-    max-width: 350px;
-    height: 160px;
+    bottom: 5px;
+    left: 10px;
+    width: 280px;
+    height: 165px;
     background: white;
-    border-radius: 15px;
+    border-radius: 12px;
     padding: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    /* Настройка скорости анимации письма */
+    transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.3s, height 0.8s ease 0.3s, width 0.8s ease 0.3s, left 0.8s ease 0.3s;
     z-index: 1;
-    overflow-y: auto;
-    opacity: 0.9;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Когда конверт открывается, письмо красиво центрируется и масштабируется */
+.envelope-wrapper.open .letter {
+    transform: translateY(-280px); /* Вылетает на центр экрана */
+    width: 90vw;
+    max-width: 340px;
+    left: calc(150px - 45vw); /* Идеальное центрирование на любом телефоне */
+    height: 60vh; /* Удобный размер для чтения */
+    z-index: 10;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+}
+
+/* Компенсация центрирования для больших экранов, чтобы не ломалось */
+@media (min-width: 378px) {
+    .envelope-wrapper.open .letter {
+        left: -20px;
+    }
 }
 
 /* Стилизация текста */
@@ -181,8 +211,8 @@ button {
 
 .letter-text h3 {
     color: #ff477e;
-    margin-bottom: 15px;
-    font-size: 17px;
+    margin-bottom: 12px;
+    font-size: 16px;
 }
 
 .letter-text p {
@@ -193,35 +223,21 @@ button {
     font-weight: bold;
     color: #ff477e;
     text-align: right;
-    margin-top: 20px;
-}
-
-/* НАДЕЖНАЯ АНИМАЦИЯ ОТКРЫТИЯ */
-.envelope-wrapper.open .top-flap {
-    transform: rotateX(180deg);
-}
-
-/* Розовый конверт плавно уезжает вниз и исчезает */
-.envelope-wrapper.open .envelope {
-    transform: translateY(100px);
-    opacity: 0;
-    pointer-events: none;
-}
-
-/* Письмо плавно встает ровно по центру экрана и увеличивается */
-.envelope-wrapper.open .letter {
-    transform: translateY(0) scale(1);
-    height: 60vh; /* Занимает 60% высоты экрана — идеально для чтения */
-    opacity: 1;
-    z-index: 10;
+    margin-top: 15px;
 }
 
 .hint {
-    margin-top: 40px;
+    margin-top: 220px;
     color: #ff477e;
     font-weight: bold;
     min-height: 20px;
     animation: bounce 1.5s infinite;
+    transition: opacity 0.5s ease;
+}
+
+.envelope-wrapper.open ~ .hint {
+    animation: none;
+    transform: translateY(0);
 }
 
 .shake {
